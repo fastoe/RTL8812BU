@@ -1,0 +1,170 @@
+##########Realtek WLAN Driver Install Package##################
+
+Language Support ¡G
+
+1->English    2->Basque   3->Bulgarian    4->Catalan   5->Simple Chinese  6->Traditional Chinese   7->Croatian   8->Czech   9->Danish   10->Dutch
+11->Finish   12->French(Canada)   13->French(France)   14->German  15->Greek   16->Hungarian   17->Indonesian   18->Italian   19->Japanese
+20->Korean  21->Norwegian   22->Polish   23->Portuguese(Brazil)  24->Portuguese(Portugal)  25->Romanian  26->Russian  27->Serbian(Cyrillic) 
+28->Slovak   29->Slovenian   30->Spanish   31->Swedish   32->Thai 33->Turkish 
+
+-- How to install: 
+      1. Enter the directory and run setup.exe. 
+      2. Follow the prompt and restart the system. 
+ 
+--How to Silent Install: 
+      1. Enter the directory and run setup.exe /s -f2"c:\setup.log" under command line. 
+      2. Or execute silent install Batch file. 
+ 
+-- How to Silent un-install: 
+      1. Enter the directory and run Setup.exe -uninst -s -f1"(Uninstall.iss Path)" -f2"c:\setup.log" under command line. 
+         p.s. The (Uninstall.iss Path) is the full path of the file ¡§Uninstall.iss¡¨.
+
+         For example , the full path of Uninstall.iss is ¡§c:\Realtek\11n USB WLAN Card¡¨ .The command will become 
+                       Setup.exe -uninst -s -f1"(Uninstall.iss Path)" -f2"c:\setup.log"
+
+      2. Or execute silent uninstall Batch file. 
+ 
+-- How to confirm driver version: 
+      1. Right click computer->Manage->Device Manager. 
+      2. Right click the Device Properties->Driver 
+
+
+########################################################
+Release Note:
+########################################################
+InstallShield Drv V3.00.0001  (2016/04/26) By Karl_Hsu
+New [APP]          
+	FindRtl:   V1.00.412.2016 (By Karl_Hsu)
+ 		Quick find support Realtek card to complete the Driver .inf input output FindRtl.ini.
+        SetDrvAll: V1.00.422.2016 (By Karl_Hsu)
+                Support check unplug or plug in card installation, support WinXP ~ Win10 OS
+
+
+Install [Protocol Driver]
+                  Eappkt: V500.1001.802.2007 for WinXP
+
+[Script_Functions]
+                  All New.(By Karl_Hsu)
+
+#########################################################
+InstallShield Drv V3.00.0001  (2016/04/28) By Karl_Hsu
+UpDate [APP]          
+	SetDrvAll: V1.02.428.2016 (By Karl_Hsu)
+
+[Script_Functions]
+	Add delete "Realtek" folder .(By Karl_Hsu)
+
+#########################################################
+InstallShield Drv V3.00.0001  (2016/05/03) By Karl_Hsu
+
+[Script_Functions]
+	UI with modifications "WlanUI".(By Karl_Hsu)
+
+#########################################################
+InstallShield Drv V3.00.0002  (2016/06/01) By Karl_Hsu
+UpDate [APP]          
+	SwUSB (XP_Win8) : V500.1033.530.2016 (By Karl_Hsu)
+                  Fix USB mode switch service stop work issues.
+[Script_Functions]
+                  Support install/remove external power limit table files.(By Karl_Hsu)
+
+#########################################################
+InstallShield Drv V3.00.0003  (2016/06/30) By Karl_Hsu
+UpDate [APP]          
+	SwUSB (XP_Win8) : V500.1034.630.2016 (By Karl_Hsu)
+                  Fix Sometimes did not do ReLinkProfile in Switch USB2.0/USB3.0 mode Process.
+
+#########################################################
+InstallShield Drv V3.00.0004  (2016/07/04) By Karl_Hsu
+[Script_Functions]
+	If InstallCiscoEAP or Install_IHV_Extensions is displayed Yes/No Reboot.(By Karl_Hsu)
+
+#########################################################
+InstallShield Drv V3.00.0005  (2016/07/27) By Karl_Hsu
+UpDate [APP]          
+	FindRtl:   V1.2.724.2016 (By Karl_Hsu)
+        SetDrvAll: V1.3.724.2016 (By Karl_Hsu)
+        Detect Devices do not need to find matching "&REV_<Hardware version ID>".
+
+#########################################################
+InstallShield Drv V3.00.0006  (2016/08/3) By Karl_Hsu
+[Script_Functions]
+        Delete Old ISS InstallShield.
+
+#########################################################
+InstallShield Drv V3.00.0007  (2016/08/29) By Karl_Hsu
+[Script_Functions]
+        Package use customized setup.ico Bug Fixes. 
+
+#########################################################
+InstallShield Drv V3.00.0008  (2016/08/31) By Karl_Hsu
+[Script_Functions]
+        Setup.icon did not put the time, the default icon is displayed.
+
+#########################################################
+InstallShield Drv V3.00.0009  (2016/10/13) By Karl_Hsu
+add change the work path variable in batch file.
+
+#########################################################
+InstallShield Drv V3.00.0010  (2016/10/31) By Karl_Hsu
+[Script_Functions]
+ 	Fix Eappkt protocol does not start in WinXP OS.
+UpDate [APP]          
+	SwUSB (XP_Win8) : V500.1035.1031.2016 (By Karl_Hsu)
+         	Modify Query OID_802_3_CURRENT_ADDRES use too small Buffer Length in WinXP OS.
+#########################################################
+InstallShield Drv V3.00.0011  (2016/11/08) By Karl_Hsu
+[Script_Functions]
+	Fix can not update Wlan Driver issue because RtlWlanU inbox driver error automatically installed in the USB Composite Device in Win10 Rs1 system.
+UpDate [APP]           
+	FindRtl:   V1.03.1108.2016 (By Karl_Hsu)
+        SetDrvAll: V1.004.1107.2016 (By Karl_Hsu)
+#########################################################
+InstallShield Drv V3.00.0012  (2016/11/18) By Karl_Hsu
+[Script_Functions]
+	Uninstall:Modify the time to stop and start SwUSB.
+UpDate [APP]          
+	SwUSB (XP_Win8) : V500.1036.1111.2016 (By Karl_Hsu)
+        Increase check card removal status at initialization Process.
+#########################################################
+InstallShield Drv V3.00.0013  (2016/11/30) By Karl_Hsu
+UpDate [APP]          
+	SwUSB (XP_Win8) : V500.1037.1130.2016 (By Karl_Hsu)
+        Fixes sometimes crash when exiting.
+#########################################################
+InstallShield Drv V3.00.0014  (2016/12/09) By Karl_Hsu
+UpDate [APP]          
+	SwUSB (XP_Win8) : V500.1038.1209.2016 (By Karl_Hsu)
+        Fixes a crash when a thread exits.
+#########################################################
+InstallShield Drv V3.00.0015  (2017/05/24) By Karl_Hsu
+UpDate [APP]          
+	FindRtl:   V1.04.502.2017 (By Karl_Hsu)
+        SetDrvAll: V1.6.524.2017 (By Karl_Hsu)
+        1. Fixed when (EnumDeviceInfo size > 100) did not install the problem.
+        2. Fixed No card installed new driver problem when the Plug in the device card with the Inbox driver normal, And then remove the card.
+
+#########################################################
+InstallShield Drv V3.00.0016  (2017/06/05) By Karl_Hsu
+UpDate [APP]          
+        SetDrvAll: V1.7.605.2017 (By Karl_Hsu)
+        1. Fixed Some platforms will crash when no card is installed.
+
+#########################################################
+InstallShield Drv V3.00.0017  (2017/06/07) By Karl_Hsu
+UpDate [APP]          
+        SetDrvAll: V1.8.607.2017 (By Karl_Hsu)
+        1. The modification processing does not insert the card to update the Inbox driver.
+
+#########################################################
+InstallShield Drv V3.00.0018  (2017/07/18) By Karl_Hsu
+UpDate [APP]          
+        SetDrvAll: V1.9.718.2017 (By Karl_Hsu)
+       1. Fixed Some platforms remove the Driver failed when Uninstall.
+
+#########################################################
+InstallShield Drv V3.00.0019  (2017/10/17) By Karl_Hsu
+[Script_Functions]    
+       1.Implement Extension INF install/remove. (By Karl_Hsu)
+
+#########################################################

@@ -1,0 +1,662 @@
+// =============================================================================
+// The RTK channel plan Rule
+//
+// You need to use RT channel plan to update in below country. And select what
+// you need in proper field.
+// Please refer to document.EFSUE channel plan filed. Now the definition
+// is from 0x20 ~ 0x53 in R07 version, and corresponding EFSUE data sheet.
+// But for EFUSE and driver known channel plan mapping.Plese use  
+//
+//
+// =============================================================================
+// Channel Plan Contents
+// Domain 		Code			EEPROM			RegistryChannelPlan
+// 2G RD		5G RD			Bit[6:0]		Decimal
+//
+//2G_WORLD   	 5G_NULL    	 20h        	 32        
+//2G_ETSI1   	 5G_NULL    	 21h        	 33        
+//2G_FCC1    	 5G_NULL    	 22h        	 34        
+//2G_MKK1    	 5G_NULL    	 23h        	 35        
+//2G_ETSI2   	 5G_NULL    	 24h        	 36        
+//2G_FCC1    	 5G_FCC1    	 25h        	 37        
+//2G_WORLD   	 5G_ETSI1   	 26h        	 38        
+//2G_MKK1    	 5G_MKK1    	 27h        	 39        
+//2G_WORLD   	 5G_KCC1    	 28h        	 40        
+//2G_WORLD   	 5G_FCC2    	 29h        	 41        
+//2G_WORLD   	 5G_FCC3    	 30h        	 48        
+//2G_WORLD   	 5G_FCC4    	 31h        	 49        
+//2G_WORLD   	 5G_FCC5    	 32h        	 50        
+//2G_WORLD   	 5G_FCC6    	 33h        	 51        
+//2G_FCC1    	 5G_FCC7    	 34h        	 52        
+//2G_WORLD   	 5G_ETSI2   	 35h        	 53        
+//2G_WORLD   	 5G_ETSI3   	 36h        	 54        
+//2G_MKK1    	 5G_MKK2    	 37h        	 55        
+//2G_MKK1    	 5G_MKK3    	 38h        	 56        
+//2G_FCC1    	 5G_NCC1    	 39h        	 57        
+//2G_FCC1    	 5G_NCC2    	 40h        	 64        
+//2G_Global  	 5G_NULL    	 41h        	 65        
+//2G_ETSI1   	 5G_ETSI4   	 42h        	 66        
+//2G_FCC1    	 5G_FCC2    	 43h        	 67        
+//2G_FCC1    	 5G_NCC3    	 44h        	 68        
+//2G_WORLD   	 5G_ACMA1   	 45h        	 69        
+//2G_FCC1    	 5G_FCC8    	 46h        	 70        
+//2G_WORLD   	 5G_ETSI6   	 47h        	 71        
+//2G_WORLD   	 5G_ETSI7   	 48h        	 72        
+//2G_WORLD   	 5G_ETSI8   	 49h        	 73        
+//2G_WORLD   	 5G_ETSI9   	 50h        	 80        
+//2G_WORLD   	 5G_ETSI10  	 51h        	 81        
+//2G_WORLD   	 5G_ETSI11  	 52h        	 82        
+//2G_FCC1    	 5G_NCC4    	 53h        	 83        
+//2G_WORLD   	 5G_ETSI12  	 54h        	 84        
+//2G_FCC1    	 5G_FCC9    	 55h        	 85        
+//2G_WORLD   	 5G_ETSI13  	 56h        	 86        
+//2G_FCC1    	 5G_FCC10   	 57h        	 87        
+//2G_MKK2    	 5G_MKK4    	 58h        	 88        
+//2G_WORLD   	 5G_ETSI14  	 59h        	 89        
+//2G_FCC2    	 5G_NULL    	 2Ah        	 42        
+//2G_FCC1    	 5G_FCC5    	 60h        	 96        
+//2G_FCC2    	 5G_FCC7    	 61h        	 97        
+//2G_FCC2    	 5G_FCC1    	 62h        	 98        
+//2G_WORLD   	 5G_ETSI15  	 63h        	 99        
+//2G_MKK2    	 5G_MKK5    	 64h        	 100       
+//2G_ETSI1   	 5G_ETSI16  	 65h        	 101       
+//2G_FCC1    	 5G_FCC14   	 66h        	 102       
+//2G_FCC1    	 5G_FCC12   	 67h        	 103       
+//2G_FCC2    	 5G_FCC14   	 68h        	 104       
+//2G_FCC2    	 5G_FCC12   	 69h        	 105       
+//2G_ETSI1   	 5G_ETSI17  	 6Ah        	 106       
+//2G_WORLD   	 5G_FCC16   	 6Bh        	 107       
+//2G_WORLD   	 5G_FCC13   	 6Ch        	 108       
+//2G_FCC2    	 5G_FCC15   	 6Dh        	 109       
+//2G_WORLD   	 5G_FCC12   	 6Eh        	 110       
+//2G_NULL    	 5G_ETSI8   	 6Fh        	 111       
+//2G_NULL    	 5G_ETSI18  	 70h        	 112       
+//2G_NULL    	 5G_ETSI17  	 71h        	 113       
+//2G_NULL    	 5G_ETSI19  	 72h        	 114       
+//2G_WORLD   	 5G_FCC7    	 73h        	 115       
+//2G_FCC2    	 5G_FCC17   	 74h        	 116       
+//2G_WORLD   	 5G_ETSI20  	 75h        	 117       
+//2G_IC1     	 5G_IC2     	 2Bh        	 43        
+//2G_FCC2    	 5G_FCC11   	 76h        	 118       
+//2G_WORLD   	 5G_ETSI21  	 77h        	 119       
+//2G_FCC1    	 5G_FCC18   	 78h        	 120       
+//2G_MKK2    	 5G_MKK1    	 79h        	 121       
+//2G_MKK2    	 5G_NULL    	 2Ch        	 44        
+//2G_WORLD   	 5G_CHILE1  	 2Dh        	 45        
+//2G_WORLD   	 5G_WORLD   	 7F         	 127       
+// =============================================================================
+// 2.4G Regulatory Domains
+// 2G RD     Regulation		Channels
+//
+//2G_WORLD   WW         	 1,2,3,4,5,6,7,8,9,10,11,12,13
+//2G_ETSI1   ETSI       	 1,2,3,4,5,6,7,8,9,10,11,12,13
+//2G_FCC1    FCC        	 1,2,3,4,5,6,7,8,9,10,11
+//2G_MKK1    MKK        	 1,2,3,4,5,6,7,8,9,10,11,12,13,14
+//2G_ETSI2   ETSI       	 10,11,12,13         
+//2G_GLOBAL  WW         	 1,2,3,4,5,6,7,8,9,10,11,12,13,14
+//2G_MKK2    MKK        	 1,2,3,4,5,6,7,8,9,10,11,12,13
+//2G_FCC2    FCC        	 1,2,3,4,5,6,7,8,9,10,11,12,13
+//2G_NULL    NA         	 NA                  
+//2G_IC1     IC         	 1,2,3,4,5,6,7,8,9,10,11,12,13
+//
+// =============================================================================
+// 5G Regulatory Domains
+// 5G RD		Regulation		Channels
+//
+//5G_NULL    	 NA         	 NA        
+//5G_ETSI1   	 ETSI       	 36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,132,136,140
+//5G_ETSI2   	 ETSI       	 36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,132,136,140,149,153,157,161,165
+//5G_ETSI3   	 ETSI       	 36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,132,149,153,157,161,165
+//5G_FCC1    	 FCC        	 36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,132,136,140,149,153,157,161,165
+//5G_FCC2    	 FCC        	 36,40,44,48,149,153,157,161,165
+//5G_FCC3    	 FCC        	 36,40,44,48,52,56,60,64,149,153,157,161,165
+//5G_FCC4    	 FCC        	 36,40,44,48,52,56,60,64,149,153,157,161
+//5G_FCC5    	 FCC        	 149, 153, 157, 161, 165
+//5G_FCC6    	 FCC        	 36,40,44,48,52,56,60,64
+//5G_FCC7    	 FCC        	 36,40,44,48,52,56,60,64,100,104,108,112,116,132,136,140,149,153,157,161,165
+//5G_IC1     	 IC         	 36,40,44,48,52,56,60,64,100,104,108,112,116,132,136,140,149,153,157,161,165
+//5G_KCC1    	 KCC        	 36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,149,153,157,161
+//5G_MKK1    	 MKK        	 36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,132,136,140
+//5G_MKK2    	 MKK        	 36,40,44,48,52,56,60,64
+//5G_MKK3    	 MKK        	 100, 104, 108, 112, 116, 120, 124, 128, 132, 136, 140
+//5G_NCC1    	 NCC        	 56,60,64,100,104,108,112,116,132,136,140,149,153,157,161,165
+//5G_NCC2    	 NCC        	 56,60,64,149,153,157,161,165
+//5G_NCC3    	 NCC        	 149, 153, 157, 161, 165
+//5G_ETSI4   	 ETSI       	 36,40,44,48
+//5G_ETSI5   	 ETSI       	 36,40,44,48,52,56,60,64,100,104,108,112,116,132,136,140,149,153,157,161,165
+//5G_FCC8    	 FCC        	 149, 153, 157, 161
+//5G_ETSI6   	 ETSI       	 36,40,44,48,52,56,60,64
+//5G_ETSI7   	 ETSI       	 36,40,44,48,52,56,60,64,149,153,157,161,165
+//5G_ETSI8   	 ETSI       	 36,40,44,48,149,153,157,161,165
+//5G_ETSI9   	 ETSI       	 100, 104, 108, 112, 116, 120, 124, 128, 132, 136, 140
+//5G_ETSI10  	 ETSI       	 149, 153, 157, 161, 165
+//5G_ETSI11  	 ETSI       	 36,40,44,48,52,56,60,64,132,136,140,149,153,157,161,165
+//5G_NCC4    	 NCC        	 52,56,60,64,100,104,108,112,116,132,136,140,149,153,157,161,165
+//5G_ETSI12  	 ETSI       	 149, 153, 157, 161
+//5G_FCC9    	 FCC        	 36,40,44,48,52,56,60,64,100,104,108,112,116,132,136,140,149,153,157,161,165
+//5G_ETSI13  	 ETSI       	 36,40,44,48,52,56,60,64,100,104,108,112,116,132,136,140
+//5G_FCC10   	 FCC        	 36,40,44,48,52,56,60,64,100,104,108,112,116,132,136,140,149,153,157,161
+//5G_MKK4    	 MKK        	 36,40,44,48
+//5G_ETSI14  	 ETSI       	 36,40,44,48,52,56,60,64,132,136,140
+//5G_FCC11   	 FCC        	 36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,132,136,140,144,149,153,157,161,165
+//5G_ETSI15  	 ETSI       	 36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,149,153,157,161,165
+//5G_MKK5    	 MKK        	 36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,132,136,140,149,153,157,161,165
+//5G_ETSI16  	 ETSI       	 36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,132,136,140,149,153,157,161,165
+//5G_ETSI17  	 ETSI       	 36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,132,136,140,149,153,157,161,165
+//5G_FCC12   	 FCC        	 36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,132,136,140,149,153,157,161,165
+//5G_FCC13   	 FCC        	 36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,132,136,140,149,153,157,161,165
+//5G_FCC14   	 FCC        	 36,40,44,48,52,56,60,64,100,104,108,112,116,132,136,140,149,153,157,161,165
+//5G_FCC15   	 FCC        	 36,40,44,48,52,56,60,64,149,153,157,161,165
+//5G_FCC16   	 FCC        	 36,40,44,48,52,56,60,64,149,153,157,161,165
+//5G_ETSI18  	 ETSI       	 36,40,44,48,149,153,157,161,165
+//5G_ETSI19  	 ETSI       	 36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,132,136,140,149,153,157,161,165
+//5G_FCC17   	 FCC        	 36,40,44,48,52,56,60,64, 100,104,108,112,116,132,136,140
+//5G_ETSI20  	 ETSI       	 52,56,60,64 ,149,153,157,161,165
+//5G_IC2     	 IC         	 36,40,44,48,52,56,60,64,100,104,108,112,116,132,136,140,144149,153,157,161,165
+//5G_ETSI21  	 ETSI       	 100,104,108,112,116,132,136,140,149,153,157,161,165
+//5G_FCC18   	 FCC        	 100,104,108,112,116,132,136,140,
+//5G_WORLD   	 WW         	 36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,132,136,140,144,149,153,157,161,165
+//5G_CHILE1  	 CHILE      	 36,40,44,48,52,56,60,64,100,104,108,112,116,120,124,128,132,136,140,144,149,153,157,161,165
+//5G_ACMA1   	 ACMA       	 36,40,44,48,52,56,60,64,100,104,108,112,116,132,136,140,149,153,157,161,165
+//
+// =============================================================================
+// SystemInfo (For user to select)
+//		LOCALE_SYSTEM_DEFAULT: Get region from Windows LOCALE_SYSTEM_DEFAULT
+//		LOCALE_USER_DEFAULT: Get region from Windows LOCALE_USER_DEFAULT
+//
+//		For example:
+// 		You can select CN for XP/ and CHN for OS after Vista.
+//
+//		[Locale Short Name]: Set CountryRegion directly. (USA/US for example)
+//
+SystemInfo=LOCALE_SYSTEM_DEFAULT
+// OsVersion=
+
+//
+// Country compatiable.
+//
+[Country_Channel_Plan]
+// [country code] = [channel plan]
+AR=87
+// Argentina                                                         57h                                                              
+BO=115
+// Bolivia                                                           73h                                                              
+BR=52
+// Brazil                                                            34h                                                              
+CL=45
+// Chile                                                             2Dh                                                              
+CO=52
+// Colombia                                                          34h                                                              
+CR=52
+// Costa Rica                                                        34h                                                              
+EC=52
+// Ecuador                                                           34h                                                              
+SV=48
+// El Salvador                                                       30h                                                              
+GT=52
+// Guatemala                                                         34h                                                              
+HN=50
+// Honduras                                                          32h                                                              
+MX=97
+// Mexico                                                            61h                                                              
+NI=52
+// Nicaragua                                                         34h                                                              
+PA=52
+// Panama                                                            34h                                                              
+PY=52
+// Paraguay                                                          34h                                                              
+PE=52
+// Peru                                                              34h                                                              
+US=118
+// United States of America (USA)                                    76h                                                              
+UY=48
+// Uruguay                                                           30h                                                              
+VE=48
+// Venezuela                                                         30h                                                              
+PR=52
+// Puerto Rico                                                       34h                                                              
+DO=52
+// Dominican Republic                                                34h                                                              
+AT=38
+// Austria                                                           26h                                                              
+BE=38
+// Belgium                                                           26h                                                              
+CY=38
+// Cyprus                                                            26h                                                              
+CZ=38
+// Czech Republic                                                    26h                                                              
+DK=38
+// Denmark                                                           26h                                                              
+EE=38
+// Estonia                                                           26h                                                              
+FI=38
+// Finland                                                           26h                                                              
+FR=38
+// France                                                            26h                                                              
+DE=38
+// Germany                                                           26h                                                              
+GR=38
+// Greece                                                            26h                                                              
+HU=38
+// Hungary                                                           26h                                                              
+IS=38
+// Iceland                                                           26h                                                              
+IE=38
+// Ireland                                                           26h                                                              
+IT=38
+// Italy                                                             26h                                                              
+LV=38
+// Latvia                                                            26h                                                              
+LI=38
+// Liechtenstein                                                     26h                                                              
+LT=38
+// Lithuania                                                         26h                                                              
+LU=38
+// Luxembourg                                                        26h                                                              
+MT=38
+// Malta                                                             26h                                                              
+MC=38
+// Monaco                                                            26h                                                              
+NL=38
+// Netherlands                                                       26h                                                              
+NO=38
+// Norway                                                            26h                                                              
+PL=38
+// Poland                                                            26h                                                              
+PT=38
+// Portugal                                                          26h                                                              
+SK=38
+// Slovakia                                                          26h                                                              
+SI=38
+// Slovenia                                                          26h                                                              
+ES=38
+// Spain                                                             26h                                                              
+SE=38
+// Sweden                                                            26h                                                              
+CH=38
+// Switzerland                                                       26h                                                              
+GB=38
+// Great Britain (United Kingdom; England)                           26h                                                              
+AL=38
+// Albania                                                           26h                                                              
+AZ=38
+// Azerbaijan                                                        26h                                                              
+BH=71
+// Bahrain                                                           47h                                                              
+BA=38
+// Bosnia & Herzegovina                                              26h                                                              
+BG=38
+// Bulgaria                                                          26h                                                              
+HR=38
+// Croatia                                                           26h                                                              
+EG=71
+// Egypt                                                             47h                                                              
+GH=38
+// Ghana                                                             26h                                                              
+IQ=38
+// Iraq                                                              26h                                                              
+IL=71
+// Israel                                                            47h                                                              
+JO=73
+// Jordan                                                            49h                                                              
+KZ=38
+// Kazakhstan                                                        26h                                                              
+KE=71
+// Kenya                                                             47h                                                              
+KW=71
+// Kuwait                                                            47h                                                              
+KG=38
+// Kyrgyzstan                                                        26h                                                              
+LB=38
+// Lebanon                                                           26h                                                              
+LS=38
+// Lesotho                                                           26h                                                              
+MK=38
+// Republic of Macedonia (FYROM)                                     26h                                                              
+MA=71
+// Morocco                                                           47h                                                              
+MZ=38
+// Mozambique                                                        26h                                                              
+NA=38
+// Namibia                                                           26h                                                              
+NG=117
+// Nigeria                                                           75h                                                              
+OM=38
+// Oman                                                              26h                                                              
+QA=81
+// Qatar                                                             51h                                                              
+RO=38
+// Romania                                                           26h                                                              
+RU=89
+// Russian, gost                                                     59h                                                              
+RU=89
+// Russia, fac                                                       59h                                                              
+SA=38
+// Saudi Arabia                                                      26h                                                              
+SN=38
+// Senegal                                                           26h                                                              
+RS=38
+// Serbia                                                            26h                                                              
+ME=38
+// Montenegro                                                        26h                                                              
+ZA=38
+// South Africa                                                      26h                                                              
+TR=38
+// Turkey                                                            26h                                                              
+UA=54
+// Ukraine                                                           36h                                                              
+AE=38
+// United Arab Emirates                                              26h                                                              
+YE=38
+// Yemen                                                             26h                                                              
+ZW=38
+// Zimbabwe                                                          26h                                                              
+BD=38
+// Bangladesh                                                        26h                                                              
+KH=38
+// Cambodia                                                          26h                                                              
+CN=72
+// China                                                             48h                                                              
+HK=38
+// Hong Kong                                                         26h                                                              
+IN=72
+// India                                                             48h                                                              
+ID=84
+// Indonesia                                                         54h                                                              
+KR=40
+// South Korea                                                       28h                                                              
+MY=99
+// Malaysia                                                          63h                                                              
+PK=81
+// Pakistan                                                          51h                                                              
+PH=38
+// Philippines                                                       26h                                                              
+SG=38
+// Singapore                                                         26h                                                              
+LK=38
+// Sri Lanka                                                         26h                                                              
+TW=118
+// Taiwan                                                            76h                                                              
+TH=38
+// Thailand                                                          26h                                                              
+VN=38
+// Vietnam                                                           26h                                                              
+AU=69
+// Australia                                                         45h                                                              
+NZ=69
+// New Zealand                                                       45h                                                              
+PG=38
+// Papua New Guinea                                                  26h                                                              
+CA=43
+// Canada                                                            2Bh                                                              
+JP=39
+// Japan- Telec                                                      27h                                                              
+JM=81
+// Jamaica                                                           51h                                                              
+AN=38
+// Netherlands Antilles                                              26h                                                              
+TT=66
+// Trinidad & Tobago                                                 42h                                                              
+TN=71
+// Tunisia                                                           47h                                                              
+AF=66
+// Afghanistan                                                       42h                                                              
+DZ=38
+// Algeria                                                           26h                                                              
+AS=52
+// American Samoa                                                    34h                                                              
+AD=38
+// Andorra                                                           26h                                                              
+AO=71
+// Angola                                                            47h                                                              
+AI=38
+// Anguilla(UK)                                                      26h                                                              
+AQ=38
+// Antarctica                                                        26h                                                              
+AG=38
+// Antigua & Barbuda                                                 26h                                                              
+AM=38
+// Armenia                                                           26h                                                              
+AW=52
+// Aruba                                                             34h                                                              
+BS=52
+// Bahamas                                                           34h                                                              
+BB=52
+// Barbados                                                          34h                                                              
+BY=38
+// Belarus                                                           26h                                                              
+BZ=52
+// Belize                                                            34h                                                              
+BJ=38
+// Benin                                                             26h                                                              
+BW=38
+// Botswana                                                          26h                                                              
+BN=71
+// Brunei                                                            47h                                                              
+BF=38
+// Burkina Faso                                                      26h                                                              
+MM=38
+// Burma (Myanmar)                                                   26h                                                              
+BI=38
+// Burundi                                                           26h                                                              
+CM=38
+// Cameroon                                                          26h                                                              
+CV=38
+// Cape Verde                                                        26h                                                              
+KY=52
+// Cayman Islands (UK)                                               34h                                                              
+CF=38
+// Central African Republic                                          26h                                                              
+TD=38
+// Chad                                                              26h                                                              
+CX=69
+// Christmas Island (Australia)                                      45h                                                              
+CC=38
+// Cocos (Keeling) Islands (Australia)                               26h                                                              
+CG=38
+// Congo, Democratic Republic of the. Zaire                          26h                                                              
+CD=38
+// Congo, Republic of the                                            26h                                                              
+CK=38
+// Cook Islands                                                      26h                                                              
+CI=38
+// Cote d'Ivoire                                                     26h                                                              
+DJ=38
+// Djibouti                                                          26h                                                              
+DM=52
+// Dominica                                                          34h                                                              
+GQ=38
+// Equatorial Guinea                                                 26h                                                              
+ER=38
+// Eritrea                                                           26h                                                              
+ET=38
+// Ethiopia                                                          26h                                                              
+FK=38
+// Falkland Islands (Islas Malvinas) (UK)                            26h                                                              
+FO=38
+// Faroe Islands (Denmark)                                           26h                                                              
+FJ=52
+// Fiji                                                              34h                                                              
+GF=38
+//   French Guiana                                                   26h                                                              
+PF=38
+// French Polynesia (France)                                         26h                                                              
+TF=38
+// French Southern and Antarctic Lands (FR Southern Territories)     26h                                                              
+GA=38
+// Gabon                                                             26h                                                              
+GM=38
+// Gambia                                                            26h                                                              
+GE=38
+// Georgia                                                           26h                                                              
+GI=38
+// Gibraltar (UK)                                                    26h                                                              
+GL=38
+// Greenland (Denmark)                                               26h                                                              
+GD=52
+// Grenada                                                           34h                                                              
+GP=38
+// Guadeloupe (France)                                               26h                                                              
+GU=52
+// Guam (USA)                                                        34h                                                              
+GG=38
+// Guernsey (UK)                                                     26h                                                              
+GN=38
+// Guinea                                                            26h                                                              
+GW=38
+// Guinea-Bissau                                                     26h                                                              
+GY=68
+// Guyana                                                            44h                                                              
+HT=52
+// Haiti                                                             34h                                                              
+HM=69
+// Heard and McDonald Islands (Australia)                            45h                                                              
+VA=38
+// Holy See (Vatican City)                                           26h                                                              
+IM=38
+// Isle of Man (UK)                                                  26h                                                              
+JE=38
+// Jersey (UK)                                                       26h                                                              
+KI=38
+// Kiribati                                                          26h                                                              
+RS=38
+// Kosovo                                                            26h                                                              
+LA=38
+// Laos                                                              26h                                                              
+LR=38
+// Liberia                                                           26h                                                              
+LY=38
+// Libya                                                             26h                                                              
+MO=38
+// Macau                                                             26h                                                              
+MG=38
+// Madagascar                                                        26h                                                              
+MW=38
+// Malawi                                                            26h                                                              
+MV=71
+// Maldives                                                          47h                                                              
+ML=38
+// Mali                                                              26h                                                              
+MH=52
+// Marshall Islands (USA)                                            34h                                                              
+MQ=38
+// Martinique (France)                                               26h                                                              
+MR=38
+// Mauritania                                                        26h                                                              
+MU=38
+// Mauritius                                                         26h                                                              
+YT=38
+// Mayotte (France)                                                  26h                                                              
+FM=52
+// Micronesia, Federated States of (USA)                             34h                                                              
+MD=38
+// Moldova                                                           26h                                                              
+MN=38
+// Mongolia                                                          26h                                                              
+MS=38
+// Montserrat (UK)                                                   26h                                                              
+NR=38
+// Nauru                                                             26h                                                              
+NP=71
+// Nepal                                                             47h                                                              
+NC=38
+// New Caledonia                                                     26h                                                              
+NE=38
+// Niger                                                             26h                                                              
+NU=69
+// Niue                                                              45h                                                              
+NF=69
+// Norfolk Island (Australia)                                        45h                                                              
+MP=52
+// Northern Mariana Islands (USA)                                    34h                                                              
+PW=52
+// Palau                                                             34h                                                              
+RE=38
+// Reunion (France)                                                  26h                                                              
+RW=38
+// Rwanda                                                            26h                                                              
+SH=38
+// Saint Helena (UK)                                                 26h                                                              
+KN=52
+// Saint Kitts and Nevis                                             34h                                                              
+LC=52
+// Saint Lucia                                                       34h                                                              
+MF=52
+// Saint Martin                                                      34h                                                              
+SX=52
+// Sint Marteen                                                      34h                                                              
+PM=38
+// Saint Pierre and Miquelon (France)                                26h                                                              
+VC=52
+// Saint Vincent and the Grenadines                                  34h                                                              
+WS=52
+// Samoa                                                             34h                                                              
+SM=38
+// San Marino                                                        26h                                                              
+ST=52
+// Sao Tome and Principe                                             34h                                                              
+SC=52
+// Seychelles                                                        34h                                                              
+SL=38
+// Sierra Leone                                                      26h                                                              
+SB=38
+// Solomon Islands                                                   26h                                                              
+SO=38
+// Somalia                                                           26h                                                              
+GS=38
+// South Georgia and the Sandwich Islands (UK)                       26h                                                              
+SR=116
+// Suriname                                                          74h                                                              
+SJ=38
+// Svalbard (Norway)                                                 26h                                                              
+SZ=38
+// Swaziland                                                         26h                                                              
+TJ=38
+// Tajikistan                                                        26h                                                              
+TZ=38
+// Tanzania                                                          26h                                                              
+TG=38
+// Togo                                                              26h                                                              
+TK=69
+// Tokelau                                                           45h                                                              
+TO=38
+// Tonga                                                             26h                                                              
+TM=38
+// Turkmenistan                                                      26h                                                              
+TC=38
+// Turks and Caicos Islands (UK)                                     26h                                                              
+UG=38
+// Uganda                                                            26h                                                              
+VI=52
+// United States Virgin Islands (USA)                                34h                                                              
+UZ=71
+// Uzbekistan                                                        47h                                                              
+VU=38
+// Vanuatu                                                           26h                                                              
+WF=38
+// Wallis and Futuna (France)                                        26h                                                              
+EH=71
+// Western Sahara                                                    47h                                                              
+ZM=38
+// Zambia                                                            26h                                                              
+IR=38
+// Iran                                                              26h                                                              
+TR=38
+// Northern Cyprus                                                   26h                                                              
+RU=89
+// Kaliningrad(Russia)                                               59h                                                              
+ES=38
+// Canary Islands(Spain)                                             26h                                                              
+ES=38
+// Ceuta (Spain)                                                     26h                                                              
+ES=38
+// Melilla (Spain)                                                   26h                                                              
+
+[Country_Not_Support_AC]
+EG
+// Egypt
+ID
+// Indonesia
+IR
+// Iran
+
