@@ -7,7 +7,7 @@ A few known wireless cards that use this driver include:
 
 Currently tested with Linux kernel 4.12.14/4.15.0/5.3.0 on X86_64 platform **only**.
 
-## DKMS install
+### DKMS install
 
 ```bash
 sudo apt update
