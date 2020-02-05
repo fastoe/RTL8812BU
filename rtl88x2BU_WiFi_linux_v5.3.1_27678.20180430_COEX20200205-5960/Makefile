@@ -1,3 +1,5 @@
+# fix compilation issues, modify by Fastoe
+USER_EXTRA_CFLAGS += -Wno-error=incompatible-pointer-types
 EXTRA_CFLAGS += $(USER_EXTRA_CFLAGS)
 EXTRA_CFLAGS += -O1
 EXTRA_CFLAGS += -Wno-vla # Suppress useless VLA warnings that Ubuntu enables by default
@@ -15,6 +17,9 @@ EXTRA_CFLAGS += -Wno-unused-parameter
 EXTRA_CFLAGS += -Wno-unused-function
 EXTRA_CFLAGS += -Wno-unused
 #EXTRA_CFLAGS += -Wno-uninitialized
+
+# fix compilation issues, modify by Fastoe
+EXTRA_CFLAGS += -Wno-date-time
 
 GCC_VER_49 := $(shell echo `$(CC) -dumpversion | cut -f1-2 -d.` \>= 4.9 | bc )
 ifeq ($(GCC_VER_49),1)
