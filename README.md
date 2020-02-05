@@ -36,6 +36,7 @@ Or via tarball, do:
 
 ```bash
 wget https://www.fastoe.com/download/driver/RTL8812BU/linux/rtl88x2BU_WiFi_linux_v5.3.1_27678.20180430_COEX20200205-5960.tar.gz
+tar -zxvf rtl88x2BU_WiFi_linux_v5.3.1_27678.20180430_COEX20200205-5960.tar.gz
 cd RTL8812BU\rtl88x2BU_WiFi_linux_v5.3.1_27678.20180430_COEX20200205-5960
 make
 sudo make install
