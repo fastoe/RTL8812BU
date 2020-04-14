@@ -35,7 +35,7 @@ sudo reboot
 Or via tarball, do:
 
 ```bash
-wget http://download.fastoe.com/driver/RTL8812BU/linux/rtl88x2BU_WiFi_linux_v5.3.1_27678.20180430_COEX20200205-5960.tar.gz
+wget https://github.com/fastoe/RTL8812BU/releases/download/20200414/rtl88x2BU_WiFi_linux_v5.3.1_27678.20180430_COEX20200205-5960.tar.gz
 tar -zxvf rtl88x2BU_WiFi_linux_v5.3.1_27678.20180430_COEX20200205-5960.tar.gz
 cd RTL8812BU\rtl88x2BU_WiFi_linux_v5.3.1_27678.20180430_COEX20200205-5960
 make
