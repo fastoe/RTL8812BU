@@ -56,4 +56,6 @@ sudo iwconfig wlx1cbfcea97791 mode monitor
 sudo ifconfig wlx1cbfcea97791 up
 ```
 
+![image](https://github.com/fastoe/RTL8812BU/blob/master/8812bu-monitor-mode.png)
+
 Enjoy!
