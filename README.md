@@ -45,6 +45,7 @@ sudo reboot
 
 For setting monitor mode:
 
+```bash
 vi ./Makefile
 72 "CONFIG_80211W = n" -> "CONFIG_80211W = y"
 76 "CONFIG_WIFI_MONITOR = n" -> "CONFIG_WIFI_MONITOR = y"
@@ -53,5 +54,6 @@ sudo make install
 sudo ifconfig wlx1cbfcea97791 down
 sudo iwconfig wlx1cbfcea97791 mode monitor
 sudo ifconfig wlx1cbfcea97791 up
+```
 
 Enjoy!
