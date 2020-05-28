@@ -1,4 +1,4 @@
-# Realtek 8812BU Driver for Linux
+# Realtek RTL8812BU Driver for Linux
 
 Driver for 802.11ac USB adapter with RTL8812BU chipset, only STA/Monitor mode is supported, no AP mode.
 
