@@ -11,35 +11,15 @@ Currently tested with Linux kernel 4.12.14/4.15.0/5.3.0 on X86_64 platform **onl
 
 ```bash
 sudo apt update
-sudo apt -y install git dkms
+sudo apt -y install dkms git bc
 git clone https://github.com/fastoe/RTL8812BU.git
-sudo dkms add ./RTL8812BU/rtl88x2BU_WiFi_linux_v5.3.1_27678.20180430_COEX20200205-5960
-sudo dkms install -m rtl88x2bu -v 5.3.1
+cd RTL8812BU
+VER=$(sed -n 's/\PACKAGE_VERSION="\(.*\)"/\1/p' dkms.conf)
+sudo rsync -rvhP ./ /usr/src/rtl88x2bu-${VER}
+sudo dkms add -m rtl88x2bu -v ${VER}
+sudo dkms build -m rtl88x2bu -v ${VER}
+sudo dkms install -m rtl88x2bu -v ${VER}
 sudo modprobe 88x2bu
-sudo reboot
-```
-
-### Manual installation
-
-To build, you have to retrieve source and run `make`.
-If via Git, do following:
-
-```bash
-git clone https://github.com/fastoe/RTL8812BU.git
-cd RTL8812BU\rtl88x2BU_WiFi_linux_v5.3.1_27678.20180430_COEX20200205-5960
-make
-sudo make install
-sudo reboot
-```
-
-Or via tarball, do:
-
-```bash
-wget https://github.com/fastoe/RTL8812BU/releases/download/20200414/rtl88x2BU_WiFi_linux_v5.3.1_27678.20180430_COEX20200205-5960.tar.gz
-tar -zxvf rtl88x2BU_WiFi_linux_v5.3.1_27678.20180430_COEX20200205-5960.tar.gz
-cd RTL8812BU\rtl88x2BU_WiFi_linux_v5.3.1_27678.20180430_COEX20200205-5960
-make
-sudo make install
 sudo reboot
 ```
 
