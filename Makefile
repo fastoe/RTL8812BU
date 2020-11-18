@@ -2281,9 +2281,9 @@ export CONFIG_RTL8822BU = m
 all: modules
 
 modules:
-    ifeq ($(TRAVIS), true)
-    KSRC := /lib/modules/5.4.0-52-generic/build
-    endif
+ifeq ($(TRAVIS), true)
+KSRC := /lib/modules/5.4.0-52-generic/build
+endif
 	$(MAKE) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) -C $(KSRC) M=$(shell pwd)  modules
 
 strip:
