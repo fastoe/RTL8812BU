@@ -6,4 +6,4 @@ addons:
   apt:
     packages:
     - linux-headers-generic
-script: sudo make -C /lib/modules/5.4.0-52-generic/build
+script: sudo make
