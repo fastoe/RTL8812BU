@@ -5,4 +5,4 @@ env:
     - KSRC=/lib/modules/5.4.0-52-generic/build
 before_install:
   - sudo apt -y install linux-headers-5.4.0-52-generic git bc
-script: echo $KSRC
+script: make
