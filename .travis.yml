@@ -1,9 +1,11 @@
 language: c
 dist: focal
+env:
+  - KSRC=/lib/modules/5.4.0-52-generic/build
 before_install:
   - sudo apt -y install linux-headers-5.4.0-52-generic dkms git bc
 addons:
   apt:
     packages:
     - linux-headers-generic
-script: sudo make -C /lib/modules/5.4.0-52-generic/build
+script: sudo make
