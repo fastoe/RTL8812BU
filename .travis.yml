@@ -1,7 +1,7 @@
 language: c
 dist: focal
 before_install:
-  - sudo apt -y install linux-modules-extra-5.4.0-52-generic dkms git bc
+  - sudo apt -y install linux-headers-5.4.0-52-generic dkms git bc
 addons:
   apt:
     packages:
