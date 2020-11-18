@@ -6,4 +6,4 @@ addons:
   apt:
     packages:
     - linux-headers-generic
-script: make
+script: KSRC := /lib/modules/5.4.0-53-generic/build && make
