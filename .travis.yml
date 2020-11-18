@@ -1,4 +1,7 @@
 language: c
+dist: focal
+before_install:
+  - sudo apt -y install dkms git bc
 addons:
   apt:
     packages:
