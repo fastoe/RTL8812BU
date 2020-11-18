@@ -5,10 +5,10 @@ Driver for 802.11ac USB adapter with RTL8812BU chipset, only STA/Monitor mode is
 A few known wireless cards that use this driver include:
 * [Fastoe AC1200 USB Wi-Fi Adapter](https://www.amazon.com/1200Mbps-ChromeBook-802-11ac-Compatible-Raspbian/dp/B081TGWCVB/ref=as_li_ss_tl?m=A9879GOT1YWJ2&marketplaceID=ATVPDKIKX0DER&qid=1581225299&s=merchant-items&sr=1-3&linkCode=ll1&tag=fastoe-20&linkId=5648949a51280f0323dd599dc27dbae4&language=en_US)
 * Cudy WU1200 AC1200 High Gain USB Wi-Fi Adapter
-* Linksys WUSB6400M
 * TP-Link Archer T3U
 * TP-Link Archer T3U Plus
 * TP-Link Archer T4U V3
+* Linksys WUSB6400M
 * Dlink DWA-181
 * Dlink DWA-182
 
