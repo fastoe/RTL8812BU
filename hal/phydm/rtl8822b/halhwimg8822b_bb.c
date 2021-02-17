@@ -23,9 +23,11 @@
  *
  *****************************************************************************/
 
-/*Image2HeaderVersion: R3 1.5.3*/
+/*Image2HeaderVersion: R3 1.4.5*/
 #include "mp_precomp.h"
 #include "../phydm_precomp.h"
+
+#define D_S_SIZE DELTA_SWINGIDX_SIZE
 
 #if (RTL8822B_SUPPORT == 1)
 static boolean
@@ -10188,7 +10190,7 @@ odm_read_and_config_mp_8822b_agc_tab(struct dm_struct *dm)
 u32
 odm_get_version_mp_8822b_agc_tab(void)
 {
-		return 113;
+		return 112;
 }
 
 /******************************************************************************
@@ -11754,7 +11756,7 @@ odm_read_and_config_mp_8822b_phy_reg(struct dm_struct *dm)
 u32
 odm_get_version_mp_8822b_phy_reg(void)
 {
-		return 113;
+		return 112;
 }
 
 /******************************************************************************

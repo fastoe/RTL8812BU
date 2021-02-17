@@ -61,12 +61,19 @@ inline struct proc_dir_entry *rtw_proc_create_dir(const char *name, struct proc_
 	return entry;
 }
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0))
+inline struct proc_dir_entry *rtw_proc_create_entry(const char *name, struct proc_dir_entry *parent,
+	const struct proc_ops *proc_ops, void * data)
+#else
 inline struct proc_dir_entry *rtw_proc_create_entry(const char *name, struct proc_dir_entry *parent,
 	const struct file_operations *fops, void * data)
+#endif
 {
 	struct proc_dir_entry *entry;
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 26))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0))
+	entry = proc_create_data(name,  S_IFREG | S_IRUGO | S_IWUGO, parent, proc_ops, data);
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 26))
 	entry = proc_create_data(name,  S_IFREG | S_IRUGO | S_IWUGO, parent, fops, data);
 #else
 	entry = create_proc_entry(name, S_IFREG | S_IRUGO | S_IWUGO, parent);
@@ -238,6 +245,23 @@ static ssize_t rtw_drv_proc_write(struct file *file, const char __user *buffer, 
 	return -EROFS;
 }
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0))
+static const struct proc_ops  rtw_drv_proc_seq_ops = {
+	.proc_open = rtw_drv_proc_open,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_release = seq_release,
+	.proc_write = rtw_drv_proc_write,
+};
+
+static const struct proc_ops rtw_drv_proc_sseq_ops = {
+	.proc_open = rtw_drv_proc_open,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_release = single_release,
+	.proc_write = rtw_drv_proc_write,
+};
+#else
 static const struct file_operations rtw_drv_proc_seq_fops = {
 	.owner = THIS_MODULE,
 	.open = rtw_drv_proc_open,
@@ -255,6 +279,7 @@ static const struct file_operations rtw_drv_proc_sseq_fops = {
 	.release = single_release,
 	.write = rtw_drv_proc_write,
 };
+#endif
 
 int rtw_drv_proc_init(void)
 {
@@ -276,9 +301,17 @@ int rtw_drv_proc_init(void)
 
 	for (i = 0; i < drv_proc_hdls_num; i++) {
 		if (drv_proc_hdls[i].type == RTW_PROC_HDL_TYPE_SEQ)
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0))
+			entry = rtw_proc_create_entry(drv_proc_hdls[i].name, rtw_proc, &rtw_drv_proc_seq_ops, (void *)i);
+#else
 			entry = rtw_proc_create_entry(drv_proc_hdls[i].name, rtw_proc, &rtw_drv_proc_seq_fops, (void *)i);
+#endif
 		else if (drv_proc_hdls[i].type == RTW_PROC_HDL_TYPE_SSEQ)
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0))
+			entry = rtw_proc_create_entry(drv_proc_hdls[i].name, rtw_proc, &rtw_drv_proc_sseq_ops, (void *)i);
+#else
 			entry = rtw_proc_create_entry(drv_proc_hdls[i].name, rtw_proc, &rtw_drv_proc_sseq_fops, (void *)i);
+#endif
 		else
 			entry = NULL;
 
@@ -1033,15 +1066,15 @@ static int proc_get_turboedca_ctrl(struct seq_file *m, void *v)
 		u32 edca_param;
 
 		if (hal_data->dis_turboedca == 0)
-			RTW_PRINT_SEL(m, "Turbo-EDCA : %s\n", "Enable"); 
-		else 		
+			RTW_PRINT_SEL(m, "Turbo-EDCA : %s\n", "Enable");
+		else
 			RTW_PRINT_SEL(m, "Turbo-EDCA : %s, mode=%d, edca_param_mode=0x%x\n", "Disable", hal_data->dis_turboedca, hal_data->edca_param_mode);
 
 
 		rtw_hal_get_hwreg(padapter, HW_VAR_AC_PARAM_BE, (u8 *)(&edca_param));
 
 		_RTW_PRINT_SEL(m, "PARAM_BE:0x%x\n", edca_param);
-		
+
 	}
 
 	return 0;
@@ -1072,28 +1105,28 @@ static ssize_t proc_set_turboedca_ctrl(struct file *file, const char __user *buf
 		}
 
 		/*  0: enable turboedca,
-			1: disable turboedca, 
+			1: disable turboedca,
 			2: disable turboedca and setting EDCA parameter based on the input parameter
-			> 2 : currently reset to 0 */ 
-			
-		if (mode > 2) 
+			> 2 : currently reset to 0 */
+
+		if (mode > 2)
 			mode = 0;
 
 		hal_data->dis_turboedca = mode;
-		
+
 		hal_data->edca_param_mode = 0; /* init. value */
 
 		RTW_INFO("dis_turboedca mode = 0x%x\n", hal_data->dis_turboedca);
-		
+
 		if (num == 2) {
 
-			hal_data->edca_param_mode = param_mode;			
+			hal_data->edca_param_mode = param_mode;
 
 			RTW_INFO("param_mode = 0x%x\n", param_mode);
 		}
-		
+
 	}
-	
+
 	return count;
 
 }
@@ -1269,7 +1302,7 @@ ssize_t proc_set_macaddr_acl(struct file *file, const char __user *buffer, size_
 #define MAC_ACL_CMD_DEL		2
 #define MAC_ACL_CMD_CLR		3
 #define MAC_ACL_CMD_NUM		4
-	
+
 	static const char * const mac_acl_cmd_str[] = {
 		"mode",
 		"add",
@@ -1371,7 +1404,7 @@ ssize_t proc_set_macaddr_acl(struct file *file, const char __user *buffer, size_
 				 } else if (!is_bcast)
 					rtw_acl_add_sta(adapter, period, addr);
 			}
-		
+
 			c = strsep(&next, " \t");
 		}
 	}
@@ -2036,7 +2069,7 @@ static void rtw_set_tx_bw_mode(struct _ADAPTER *adapter, u8 bw_mode)
 	) {
 		/* RA mask update needed */
 		update = _TRUE;
-	}		
+	}
 	adapter->driver_tx_bw_mode = bw_mode;
 
 	if (update == _TRUE) {
@@ -3093,7 +3126,7 @@ static ssize_t proc_set_napi_th(struct file *file, const char __user *buffer, si
 
 	for (i = 0; i < dvobj->iface_nums; i++) {
 		iface = dvobj->padapters[i];
-		if (iface) {	
+		if (iface) {
 			if (buffer && !copy_from_user(tmp, buffer, count)) {
 				registry = &iface->registrypriv;
 				num = sscanf(tmp, "%d", &thrshld);
@@ -3615,7 +3648,7 @@ static void tpt_mode_default(struct _ADAPTER *adapter)
 	dvobj->scan_deny = _FALSE;
 
 	/* 2. back to original LPS mode */
-#ifdef CONFIG_LPS		
+#ifdef CONFIG_LPS
 	rtw_pm_set_lps(adapter, adapter->registrypriv.power_mgnt);
 #endif
 
@@ -3630,13 +3663,13 @@ static void rtw_tpt_mode(struct _ADAPTER *adapter)
 
 	if (dvobj->tpt_mode > 0) {
 
-		/* when enable each tpt mode 
+		/* when enable each tpt mode
 			1. scan deny
 			2. disable LPS */
-			
+
 		dvobj->scan_deny = _TRUE;
 
-#ifdef CONFIG_LPS		
+#ifdef CONFIG_LPS
 		rtw_pm_set_lps(adapter, PS_MODE_ACTIVE);
 #endif
 
@@ -3647,9 +3680,9 @@ static void rtw_tpt_mode(struct _ADAPTER *adapter)
 			tpt_mode_default(adapter);
 			break;
 		case 1: /* High TP*/
-			/*tpt_mode1(adapter);*/			 
+			/*tpt_mode1(adapter);*/
 			dvobj->edca_be_ul = 0x5e431c;
-			dvobj->edca_be_dl = 0x00431c;			 
+			dvobj->edca_be_dl = 0x00431c;
 			break;
 		case 2: /* noise */
 			/* tpt_mode2(adapter); */
@@ -3673,7 +3706,7 @@ static void rtw_tpt_mode(struct _ADAPTER *adapter)
 			rtw_set_tx_bw_mode(adapter, 0x20); /* for 2.4g, fixed tx_bw_mode to 20Mhz */
 			break;
 		default: /* default mode */
-			tpt_mode_default(adapter);		
+			tpt_mode_default(adapter);
 			break;
 	}
 
@@ -3706,7 +3739,7 @@ static ssize_t proc_set_tpt_mode(struct file *file, const char __user *buffer,
 	}
 
 	if (mode > MAX_TPT_MODE_NUM )
-		mode = 0;	
+		mode = 0;
 
 	RTW_PRINT("%s: previous mode =  %d\n",
 		  __FUNCTION__, dvobj->tpt_mode);
@@ -3723,17 +3756,6 @@ exit:
 
 }
 #endif /* CONFIG_RTW_TPT_MODE */
-
-int proc_get_cur_beacon_keys(struct seq_file *m, void *v)
-{
-	struct net_device *dev = m->private;
-	_adapter *adapter = rtw_netdev_priv(dev);
-	struct mlme_priv *mlme = &adapter->mlmepriv;
-
-	rtw_dump_bcn_keys(m, &mlme->cur_beacon_keys);
-
-	return 0;
-}
 
 /*
 * rtw_adapter_proc:
@@ -3976,7 +3998,7 @@ const struct rtw_proc_hdl adapter_proc_hdls[] = {
 	RTW_PROC_HDL_SSEQ("ps_info", proc_get_ps_info, proc_set_ps_info),
 #ifdef CONFIG_WMMPS_STA
 	RTW_PROC_HDL_SSEQ("wmmps_info", proc_get_wmmps_info, proc_set_wmmps_info),
-#endif /* CONFIG_WMMPS_STA */	
+#endif /* CONFIG_WMMPS_STA */
 #endif
 #ifdef CONFIG_TDLS
 	RTW_PROC_HDL_SSEQ("tdls_info", proc_get_tdls_info, NULL),
@@ -4100,7 +4122,6 @@ const struct rtw_proc_hdl adapter_proc_hdls[] = {
 	#endif
 #endif
 
-	RTW_PROC_HDL_SSEQ("cur_beacon_keys", proc_get_cur_beacon_keys, NULL),
 };
 
 const int adapter_proc_hdls_num = sizeof(adapter_proc_hdls) / sizeof(struct rtw_proc_hdl);
@@ -4139,6 +4160,23 @@ static ssize_t rtw_adapter_proc_write(struct file *file, const char __user *buff
 	return -EROFS;
 }
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0))
+static const struct proc_ops rtw_adapter_proc_seq_ops = {
+	.proc_open = rtw_adapter_proc_open,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_release = seq_release,
+	.proc_write = rtw_adapter_proc_write,
+};
+
+static const struct proc_ops rtw_adapter_proc_sseq_ops = {
+	.proc_open = rtw_adapter_proc_open,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_release = single_release,
+	.proc_write = rtw_adapter_proc_write,
+};
+#else
 static const struct file_operations rtw_adapter_proc_seq_fops = {
 	.owner = THIS_MODULE,
 	.open = rtw_adapter_proc_open,
@@ -4156,6 +4194,7 @@ static const struct file_operations rtw_adapter_proc_sseq_fops = {
 	.release = single_release,
 	.write = rtw_adapter_proc_write,
 };
+#endif
 
 int proc_get_odm_adaptivity(struct seq_file *m, void *v)
 {
@@ -4308,6 +4347,23 @@ static ssize_t rtw_odm_proc_write(struct file *file, const char __user *buffer, 
 	return -EROFS;
 }
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0))
+static const struct proc_ops rtw_odm_proc_seq_ops = {
+	.proc_open = rtw_odm_proc_open,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_release = seq_release,
+	.proc_write = rtw_odm_proc_write,
+};
+
+static const struct proc_ops rtw_odm_proc_sseq_ops = {
+	.proc_open = rtw_odm_proc_open,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_release = single_release,
+	.proc_write = rtw_odm_proc_write,
+};
+#else
 static const struct file_operations rtw_odm_proc_seq_fops = {
 	.owner = THIS_MODULE,
 	.open = rtw_odm_proc_open,
@@ -4325,6 +4381,7 @@ static const struct file_operations rtw_odm_proc_sseq_fops = {
 	.release = single_release,
 	.write = rtw_odm_proc_write,
 };
+#endif
 
 struct proc_dir_entry *rtw_odm_proc_init(struct net_device *dev)
 {
@@ -4353,9 +4410,17 @@ struct proc_dir_entry *rtw_odm_proc_init(struct net_device *dev)
 
 	for (i = 0; i < odm_proc_hdls_num; i++) {
 		if (odm_proc_hdls[i].type == RTW_PROC_HDL_TYPE_SEQ)
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0))
+			entry = rtw_proc_create_entry(odm_proc_hdls[i].name, dir_odm, &rtw_odm_proc_seq_ops, (void *)i);
+#else
 			entry = rtw_proc_create_entry(odm_proc_hdls[i].name, dir_odm, &rtw_odm_proc_seq_fops, (void *)i);
+#endif
 		else if (odm_proc_hdls[i].type == RTW_PROC_HDL_TYPE_SSEQ)
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0))
+			entry = rtw_proc_create_entry(odm_proc_hdls[i].name, dir_odm, &rtw_odm_proc_sseq_ops, (void *)i);
+#else
 			entry = rtw_proc_create_entry(odm_proc_hdls[i].name, dir_odm, &rtw_odm_proc_sseq_fops, (void *)i);
+#endif
 		else
 			entry = NULL;
 
@@ -4449,6 +4514,23 @@ static ssize_t rtw_mcc_proc_write(struct file *file, const char __user *buffer, 
 	return -EROFS;
 }
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0))
+static const struct proc_ops rtw_mcc_proc_seq_ops = {
+	.proc_open = rtw_mcc_proc_open,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_release = seq_release,
+	.proc_write = rtw_mcc_proc_write,
+};
+
+static const struct proc_ops rtw_mcc_proc_sseq_ops = {
+	.proc_open = rtw_mcc_proc_open,
+	.proc_read = seq_read,
+	.proc_lseek = seq_lseek,
+	.proc_release = single_release,
+	.proc_write = rtw_mcc_proc_write,
+};
+#else
 static const struct file_operations rtw_mcc_proc_seq_fops = {
 	.owner = THIS_MODULE,
 	.open = rtw_mcc_proc_open,
@@ -4466,6 +4548,7 @@ static const struct file_operations rtw_mcc_proc_sseq_fops = {
 	.release = single_release,
 	.write = rtw_mcc_proc_write,
 };
+#endif
 
 struct proc_dir_entry *rtw_mcc_proc_init(struct net_device *dev)
 {
@@ -4559,9 +4642,17 @@ struct proc_dir_entry *rtw_adapter_proc_init(struct net_device *dev)
 
 	for (i = 0; i < adapter_proc_hdls_num; i++) {
 		if (adapter_proc_hdls[i].type == RTW_PROC_HDL_TYPE_SEQ)
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0))
+			entry = rtw_proc_create_entry(adapter_proc_hdls[i].name, dir_dev, &rtw_adapter_proc_seq_ops, (void *)i);
+#else
 			entry = rtw_proc_create_entry(adapter_proc_hdls[i].name, dir_dev, &rtw_adapter_proc_seq_fops, (void *)i);
+#endif
 		else if (adapter_proc_hdls[i].type == RTW_PROC_HDL_TYPE_SSEQ)
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0))
+			entry = rtw_proc_create_entry(adapter_proc_hdls[i].name, dir_dev, &rtw_adapter_proc_sseq_ops, (void *)i);
+#else
 			entry = rtw_proc_create_entry(adapter_proc_hdls[i].name, dir_dev, &rtw_adapter_proc_sseq_fops, (void *)i);
+#endif
 		else
 			entry = NULL;
 

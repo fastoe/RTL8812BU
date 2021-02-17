@@ -23,11 +23,7 @@
 #ifdef CONFIG_SUPPORT_TRX_SHARED
 #define MAX_RECVBUF_SZ		46080	/* 45KB, TX: (256-64)KB */
 #else /* !CONFIG_SUPPORT_TRX_SHARED */
-#ifdef CONFIG_PCI_HCI
-#define MAX_RECVBUF_SZ		12288	/* 12KB */
-#else
 #define MAX_RECVBUF_SZ		24576	/* 24KB, TX: 256KB */
-#endif /* !CONFIG_PCI_HCI */
 #endif /* !CONFIG_SUPPORT_TRX_SHARED */
 
 /*
@@ -153,9 +149,9 @@
 /* RFE */
 #define rA_RFE_Pinmux_Jaguar	0xCB0	/* hal_mp.c */
 #define	rB_RFE_Pinmux_Jaguar	0xEB0	/* Path_B RFE control pinmux */
-#define	rA_RFE_Inv_Jaguar		0xCB4	/* Path_A RFE cotrol */  
+#define	rA_RFE_Inv_Jaguar		0xCB4	/* Path_A RFE cotrol */
 #define	rB_RFE_Inv_Jaguar		0xEB4	/* Path_B RFE control */
-#define	rA_RFE_Jaguar			0xCB8 	/* Path_A RFE cotrol */  
+#define	rA_RFE_Jaguar			0xCB8 	/* Path_A RFE cotrol */
 #define	rB_RFE_Jaguar			0xEB8	/* Path_B RFE control */
 #define	rA_RFE_Inverse_Jaguar	0xCBC	/* Path_A RFE control inverse */
 #define	rB_RFE_Inverse_Jaguar	0xEBC	/* Path_B RFE control inverse */

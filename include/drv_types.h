@@ -220,6 +220,9 @@ struct registry_priv {
 #ifdef CONFIG_TX_EARLY_MODE
 	u8   early_mode;
 #endif
+#ifdef CONFIG_SW_LED
+	u8   led_ctrl;
+#endif
 	u8	acm_method;
 	/* WMM */
 	u8	wmm_enable;
@@ -1112,7 +1115,7 @@ struct dvobj_priv {
 	_timer txbcn_timer;
 #endif
 	_timer dynamic_chk_timer; /* dynamic/periodic check timer */
-	
+
 #ifdef CONFIG_RTW_NAPI_DYNAMIC
 	u8 en_napi_dynamic;
 #endif /* CONFIG_RTW_NAPI_DYNAMIC */
@@ -1258,8 +1261,8 @@ struct dvobj_priv {
 	u8 tpt_mode; /* RTK T/P Testing Mode, 0:default mode */
 	u32 edca_be_ul;
 	u32 edca_be_dl;
-#endif 
-	/* also for RTK T/P Testing Mode */ 
+#endif
+	/* also for RTK T/P Testing Mode */
 	u8 scan_deny;
 
 };

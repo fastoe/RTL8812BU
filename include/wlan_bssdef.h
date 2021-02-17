@@ -627,6 +627,7 @@ struct	wlan_network {
 	int	aid;			/* will only be valid when a BSS is joinned. */
 	int	join_res;
 	WLAN_BSSID_EX	network; /* must be the last item */
+	WLAN_BCN_INFO	BcnInfo;
 #ifdef PLATFORM_WINDOWS
 	unsigned char  iebuf[MAX_IE_SZ];
 #endif

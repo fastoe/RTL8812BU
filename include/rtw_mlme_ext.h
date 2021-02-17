@@ -276,10 +276,6 @@ enum TDLS_option {
 
 #endif /* CONFIG_TDLS */
 
-#ifndef NL80211_AUTHTYPE_SAE
-#define NL80211_AUTHTYPE_SAE 4
-#endif
-
 /*
  * Usage:
  * When one iface acted as AP mode and the other iface is STA mode and scanning,
@@ -683,8 +679,6 @@ void change_band_update_ie(_adapter *padapter, WLAN_BSSID_EX *pnetwork, u8 ch);
 
 void Set_MSR(_adapter *padapter, u8 type);
 
-void rtw_set_external_auth_status(_adapter *padapter, const void *data, int len);
-
 u8 rtw_get_oper_ch(_adapter *adapter);
 void rtw_set_oper_ch(_adapter *adapter, u8 ch);
 u8 rtw_get_oper_bw(_adapter *adapter);
@@ -771,7 +765,7 @@ void rtw_absorb_ssid_ifneed(_adapter *padapter, WLAN_BSSID_EX *bssid, u8 *pframe
 int rtw_get_bcn_keys(ADAPTER *Adapter, u8 *pframe, u32 packet_len,
 		struct beacon_keys *recv_beacon);
 int validate_beacon_len(u8 *pframe, uint len);
-void rtw_dump_bcn_keys(void *sel, struct beacon_keys *recv_beacon);
+void rtw_dump_bcn_keys(struct beacon_keys *recv_beacon);
 int rtw_check_bcn_info(ADAPTER *Adapter, u8 *pframe, u32 packet_len);
 void update_beacon_info(_adapter *padapter, u8 *pframe, uint len, struct sta_info *psta);
 #ifdef CONFIG_DFS
@@ -982,11 +976,11 @@ unsigned int OnAction_p2p(_adapter *padapter, union recv_frame *precv_frame);
 #ifdef CONFIG_RTW_80211R
 void rtw_ft_update_bcn(_adapter *padapter, union recv_frame *precv_frame);
 void rtw_ft_start_clnt_join(_adapter *padapter);
-u8 rtw_ft_update_rsnie(_adapter *padapter, u8 bwrite, 
+u8 rtw_ft_update_rsnie(_adapter *padapter, u8 bwrite,
 	struct pkt_attrib *pattrib, u8 **pframe);
-void rtw_ft_build_auth_req_ies(_adapter *padapter, 
+void rtw_ft_build_auth_req_ies(_adapter *padapter,
 	struct pkt_attrib *pattrib, u8 **pframe);
-void rtw_ft_build_assoc_req_ies(_adapter *padapter, 
+void rtw_ft_build_assoc_req_ies(_adapter *padapter,
 	u8 is_reassoc, struct pkt_attrib *pattrib, u8 **pframe);
 u8 rtw_ft_update_auth_rsp_ies(_adapter *padapter, u8 *pframe, u32 len);
 void rtw_ft_start_roam(_adapter *padapter, u8 *pTargetAddr);
@@ -1115,8 +1109,6 @@ u8 set_csa_hdl(_adapter *padapter, unsigned char *pbuf);	/* Kurt: Handling DFS c
 u8 tdls_hdl(_adapter *padapter, unsigned char *pbuf);
 u8 run_in_thread_hdl(_adapter *padapter, u8 *pbuf);
 u8 rtw_getmacreg_hdl(_adapter *padapter, u8 *pbuf);
-
-int rtw_sae_preprocess(_adapter *adapter, const u8 *buf, u32 len, u8 tx);
 
 #define GEN_DRV_CMD_HANDLER(size, cmd)	{size, &cmd ## _hdl},
 #define GEN_MLME_EXT_HANDLER(size, cmd)	{size, cmd},
