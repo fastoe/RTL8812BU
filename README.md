@@ -45,9 +45,9 @@ sed -i 's/CONFIG_WIFI_MONITOR = n/CONFIG_WIFI_MONITOR = y/' Makefile
 
 make
 sudo make install
-sudo ifconfig wlx1cbfcea97791 down
-sudo iwconfig wlx1cbfcea97791 mode monitor
-sudo ifconfig wlx1cbfcea97791 up
+sudo ip link set wlx1cbfcea97791 down
+sudo iw wlx1cbfcea97791 set monitor none
+sudo ip link set wlx1cbfcea97791 up
 ```
 
 ![image](https://www.fastoe.com/images/2020/05/8812bu-monitor-mode.png)
