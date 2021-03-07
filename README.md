@@ -52,4 +52,13 @@ sudo ip link set wlx1cbfcea97791 up
 
 ![image](https://www.fastoe.com/images/2020/05/8812bu-monitor-mode.png)
 
+For 5.10 kernel, please clone the v5.6.1 branch:
+```bash
+clone the new branch:
+git clone -b v5.6.1 https://github.com/fastoe/RTL8812BU.git
+cd RTL8812BU
+make
+sudo make install
+sudo reboot
+```
 Enjoy!
