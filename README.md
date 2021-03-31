@@ -24,7 +24,7 @@ Currently tested with Linux kernel 4.12.14/4.15.0/5.3.0 on X86_64 platform **onl
 
 ```bash
 sudo apt update
-sudo apt -y install dkms git bc
+sudo apt install -y dkms git bc
 git clone https://github.com/fastoe/RTL8812BU.git
 cd RTL8812BU
 VER=$(sed -n 's/\PACKAGE_VERSION="\(.*\)"/\1/p' dkms.conf)
