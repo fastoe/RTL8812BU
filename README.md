@@ -52,4 +52,36 @@ sudo ifconfig wlx1cbfcea97791 up
 
 ![image](https://www.fastoe.com/images/2020/05/8812bu-monitor-mode.png)
 
+### On Debian, prepare kernel before compiling ###
+If you're getting an error like this one in the dkms build step:
+
+```
+make[1]: Entering directory '/usr/src/linux-headers-5.10.0-6-amd64'
+
+  ERROR: Kernel configuration is invalid.
+         include/generated/autoconf.h or include/config/auto.conf are missing.
+         Run 'make oldconfig && make prepare' on kernel src to fix it.
+
+make[2]: *** [/usr/src/linux-headers-5.10.0-6-common/Makefile:718: include/config/auto.conf] Error 1
+make[1]: *** [/usr/src/linux-headers-5.10.0-6-common/Makefile:185: __sub-make] Error 2
+make[1]: Leaving directory '/usr/src/linux-headers-5.10.0-6-amd64'
+make: *** [Makefile:2284: modules] Error 2
+```
+
+then remember the major number ("5.10") and the complete version number plus package version ("5.10.0-6-amd64") and do:
+
+```bash
+apt-get install linux-source-5.10
+pushd /usr/src/linux-source-5.10/
+make oldconfig && make prepare
+sudo cp include/generated/autoconf.h /usr/src/linux-headers-5.10.0-6-amd64/include/generated
+popd
+```
+before continuing with 
+```bash
+sudo dkms build -m rtl88x2bu -v ${VER}
+sudo dkms install -m rtl88x2bu -v ${VER}
+sudo modprobe 88x2bu
+```
+
 Enjoy!
