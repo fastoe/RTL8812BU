@@ -3191,12 +3191,13 @@ void rtw_drv_scan_by_self(_adapter *padapter, u8 reason)
 	ssc_chk = rtw_sitesurvey_condition_check(padapter, _FALSE);
 	if( ssc_chk == SS_DENY_BUSY_TRAFFIC) {
 		#ifdef CONFIG_LAYER2_ROAMING
-		if (rtw_chk_roam_flags(padapter, RTW_ROAM_ACTIVE) && pmlmepriv->need_to_roam == _TRUE)
+		if (rtw_chk_roam_flags(padapter, RTW_ROAM_ACTIVE) && pmlmepriv->need_to_roam == _TRUE) {
 			RTW_INFO(FUNC_ADPT_FMT" need to roam, don't care BusyTraffic\n", FUNC_ADPT_ARG(padapter));
-		else
-		#endif
+		} else {
 			RTW_INFO(FUNC_ADPT_FMT" exit BusyTraffic\n", FUNC_ADPT_ARG(padapter));
 			goto exit;
+		}
+		#endif
 	}
 	else if (ssc_chk != SS_ALLOW)
 		goto exit;
