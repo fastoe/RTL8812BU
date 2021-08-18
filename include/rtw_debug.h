@@ -228,10 +228,10 @@ extern uint rtw_drv_log_level;
 /* dump message to selected 'stream' */
 #undef _RTW_PRINT_SEL
 #define _RTW_PRINT_SEL(sel, fmt, arg...) \
-	do {\
-		if (sel == RTW_DBGDUMP)\
+	do { \
+		if (sel == RTW_DBGDUMP) \
 			_RTW_PRINT(fmt, ##arg); \
-		else {\
+		else { \
 			_seqdump(sel, fmt, ##arg) /*rtw_warn_on(1)*/; \
 		} \
 	} while (0)
