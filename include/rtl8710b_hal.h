@@ -175,10 +175,10 @@ typedef struct _RT_8710B_FIRMWARE_HDR {
 #define   PACKAGE_QFN32_S           0
 #define   PACKAGE_QFN48M_S        1    //definiton 8188GU Dongle Package, Efuse Physical Address 0xF8 = 0xFE
 #define   PACKAGE_QFN48_S  	       2
-#define   PACKAGE_QFN64_S  	       3     
-#define   PACKAGE_QFN32_U  		4    
+#define   PACKAGE_QFN64_S  	       3
+#define   PACKAGE_QFN32_U  		4
 #define   PACKAGE_QFN48M_U  	5   //definiton 8188GU Dongle Package, Efuse Physical Address 0xF8 = 0xEE
-#define   PACKAGE_QFN48_U  		6 
+#define   PACKAGE_QFN48_U  		6
 #define   PACKAGE_QFN68_U  		7
 
 typedef enum _PACKAGE_TYPE_E
@@ -213,9 +213,9 @@ void rtl8710b_init_default_value(PADAPTER padapter);
 
 
 u32 indirect_read32_8710b(PADAPTER padapter, u32 regaddr);
-VOID indirect_write32_8710b(PADAPTER padapter, u32 regaddr, u32 data);
+void indirect_write32_8710b(PADAPTER padapter, u32 regaddr, u32 data);
 u32 hal_query_syson_reg_8710b(PADAPTER padapter, u32 regaddr, u32 bitmask);
-VOID hal_set_syson_reg_8710b(PADAPTER padapter, u32 regaddr, u32 bitmask, u32 data);
+void hal_set_syson_reg_8710b(PADAPTER padapter, u32 regaddr, u32 bitmask, u32 data);
 #define HAL_SetSYSOnReg hal_set_syson_reg_8710b
 
 
@@ -241,7 +241,7 @@ void Hal_EfuseParseXtal_8710B(PADAPTER pAdapter,
 			      u8 *hwinfo, u8 AutoLoadFail);
 void Hal_EfuseParseThermalMeter_8710B(PADAPTER padapter,
 				      u8 *hwinfo, u8 AutoLoadFail);
-VOID Hal_EfuseParseBoardType_8710B(PADAPTER Adapter,
+void Hal_EfuseParseBoardType_8710B(PADAPTER Adapter,
 				   u8	*PROMContent, BOOLEAN AutoloadFail);
 #endif
 

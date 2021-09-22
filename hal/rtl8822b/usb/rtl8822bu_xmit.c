@@ -112,13 +112,13 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 	if ((pxmitframe->frame_tag & 0x0f) == DATA_FRAMETAG) {
 		/* RTW_INFO("pxmitframe->frame_tag == DATA_FRAMETAG\n");	*/
 		rtl8822b_fill_txdesc_sectype(pattrib, ptxdesc);
-#ifdef CONFIG_TX_CSUM_OFFLOAD
+#ifdef CONFIG_TCP_CSUM_OFFLOAD_TX
 	if (pattrib->hw_csum == 1) {
 		int offset = 48 + pxmitframe->pkt_offset*8 + 8;
 
 		SET_TX_DESC_OFFSET_8822B(ptxdesc, offset);
 		SET_TX_DESC_CHK_EN_8822B(ptxdesc, 1);
-		SET_TX_DESC_WHEADER_LEN_8822B(ptxdesc, (pattrib->hdrlen + pattrib->iv_len)>>1);
+		SET_TX_DESC_WHEADER_LEN_8822B(ptxdesc, (pattrib->hdrlen + pattrib->iv_len + XATTRIB_GET_MCTRL_LEN(pattrib))>>1);
 	}
 #endif
 
@@ -135,6 +135,9 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 #ifdef CONFIG_CONCURRENT_MODE
 		if (bmcst)
 			rtl8822b_fill_txdesc_force_bmc_camid(pattrib, ptxdesc);
+#endif
+#ifdef CONFIG_SUPPORT_DYNAMIC_TXPWR
+		rtw_phydm_set_dyntxpwr(padapter, ptxdesc, pattrib->mac_id);
 #endif
 
 		if ((pattrib->ether_type != 0x888e) &&
@@ -203,7 +206,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
 #ifdef CONFIG_WMMPS_STA
 			if (pattrib->trigger_frame)
 				SET_TX_DESC_TRI_FRAME_8822B (ptxdesc, 1);
-#endif /* CONFIG_WMMPS_STA */			
+#endif /* CONFIG_WMMPS_STA */
 
 		} else {
 			/*
@@ -436,7 +439,7 @@ static s32 rtw_dump_xframe(PADAPTER padapter, struct xmit_frame *pxmitframe)
 			/* download rsvd page or fw */
 			inner_ret = rtw_write_port(padapter, ff_hwaddr, w_sz, (unsigned char *)pxmitbuf);
 		else
-			enqueue_pending_xmitbuf(pxmitpriv, pxmitbuf);		
+			enqueue_pending_xmitbuf(pxmitpriv, pxmitbuf);
 #else
 		inner_ret = rtw_write_port(padapter, ff_hwaddr, w_sz, (unsigned char *)pxmitbuf);
 #endif
@@ -745,7 +748,7 @@ agg_end:
 		/* download rsvd page or fw */
 		rtw_write_port(padapter, ff_hwaddr, pbuf_tail, (u8 *)pxmitbuf);
 	else
-		enqueue_pending_xmitbuf(pxmitpriv, pxmitbuf);		
+		enqueue_pending_xmitbuf(pxmitpriv, pxmitbuf);
 #else
 	rtw_write_port(padapter, ff_hwaddr, pbuf_tail, (u8 *)pxmitbuf);
 #endif

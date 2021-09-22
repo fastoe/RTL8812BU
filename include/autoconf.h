@@ -33,7 +33,6 @@
  * Wi-Fi Functions Config
  */
 
-#define CONFIG_IEEE80211_BAND_5GHZ 1
 #define CONFIG_80211N_HT
 #define CONFIG_80211AC_VHT
 #ifdef CONFIG_80211AC_VHT
@@ -180,7 +179,7 @@
 
 #define CONFIG_RTW_LED
 #ifdef CONFIG_RTW_LED
-	#define CONFIG_RTW_SW_LED
+//	#define CONFIG_RTW_SW_LED
 	#ifdef CONFIG_RTW_SW_LED
 		/* #define CONFIG_RTW_LED_HANDLED_BY_CMD_THREAD */
 	#endif
@@ -203,9 +202,6 @@
 /* #define CONFIG_BACKGROUND_NOISE_MONITOR */
 #endif
 #define RTW_NOTCH_FILTER 0 /* 0:Disable, 1:Enable, */
-
-#define CONFIG_TX_MCAST2UNI		/*Support IP multicast->unicast*/
-/* #define CONFIG_CHECK_AC_LIFETIME 1 */	/* Check packet lifetime of 4 ACs. */
 
 
 /*
@@ -311,8 +307,6 @@
  * Debug Related Config
  */
 #define DBG	1
-
-#define CONFIG_PROC_DEBUG
 
 #define DBG_CONFIG_ERROR_DETECT
 

@@ -18,7 +18,7 @@
 #define C2H_TYPE_REG 0
 #define C2H_TYPE_PKT 1
 
-/* 
+/*
 * C2H event format:
 * Fields    TRIGGER    PAYLOAD    SEQ    PLEN    ID
 * BITS     [127:120]    [119:16]   [15:8]  [7:4]  [3:0]
@@ -32,7 +32,7 @@
 #define SET_C2H_PLEN(_c2h, _val)	SET_BITS_TO_LE_1BYTE(((u8*)(_c2h)), 4, 4, _val)
 #define SET_C2H_SEQ(_c2h, _val)		SET_BITS_TO_LE_1BYTE(((u8*)(_c2h)) + 1 , 0, 8, _val)
 
-/* 
+/*
 * C2H event format:
 * Fields    TRIGGER     PLEN      PAYLOAD    SEQ      ID
 * BITS    [127:120]  [119:112]  [111:16]   [15:8]   [7:0]
@@ -100,6 +100,8 @@ int c2h_mac_hidden_rpt_hdl(_adapter *adapter, u8 *data, u8 len);
 #define MAC_HIDDEN_RPT_2_LEN 5
 int c2h_mac_hidden_rpt_2_hdl(_adapter *adapter, u8 *data, u8 len);
 int hal_read_mac_hidden_rpt(_adapter *adapter);
+#else
+#define hal_read_mac_hidden_rpt(adapter) _SUCCESS
 #endif /* CONFIG_RTW_MAC_HIDDEN_RPT */
 
 /* C2H_DEFEATURE_DBG, 0x22 */
@@ -126,5 +128,4 @@ int c2h_per_rate_rpt_hdl(_adapter *adapter, u8 *data, u8 len);
 #define LPS_STATUS_RPT_LEN 2
 int c2h_lps_status_rpt(PADAPTER adapter, u8 *data, u8 len);
 #endif /* CONFIG_LPS_ACK */
-
 #endif /* __COMMON_C2H_H__ */

@@ -23,7 +23,7 @@
 
 #ifdef CONFIG_SUPPORT_USB_INT
 static void rtl8822bu_interrupt_handler(PADAPTER padapter, u16 pkt_len, u8 *pbuf)
-{	
+{
 	}
 #endif /* CONFIG_SUPPORT_USB_INT */
 
@@ -152,7 +152,7 @@ static void gethwreg(PADAPTER padapter, u8 variable, u8 *val)
 	Description:
 		Change default setting of specified variable.
 */
-static u8 sethaldefvar(PADAPTER padapter, HAL_DEF_VARIABLE eVariable, PVOID pValue)
+static u8 sethaldefvar(PADAPTER padapter, HAL_DEF_VARIABLE eVariable, void *pValue)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(padapter);
 	u8 bResult = _SUCCESS;
@@ -170,7 +170,7 @@ static u8 sethaldefvar(PADAPTER padapter, HAL_DEF_VARIABLE eVariable, PVOID pVal
 	Description:
 		Query setting of specified variable.
 */
-static u8 gethaldefvar(PADAPTER	padapter, HAL_DEF_VARIABLE eVariable, PVOID pValue)
+static u8 gethaldefvar(PADAPTER	padapter, HAL_DEF_VARIABLE eVariable, void *pValue)
 {
 	HAL_DATA_TYPE *pHalData = GET_HAL_DATA(padapter);
 	u8 bResult = _SUCCESS;
@@ -216,7 +216,7 @@ static void read_ledsetting(PADAPTER adapter)
 
 #ifdef CONFIG_RTW_SW_LED
 	PHAL_DATA_TYPE hal;
-	
+
 	hal = GET_HAL_DATA(adapter);
 	ledpriv->bRegUseLed = _TRUE;
 
@@ -237,7 +237,7 @@ static void read_ledsetting(PADAPTER adapter)
 #endif /* CONFIG_RTW_SW_LED */
 }
 #endif /* CONFIG_RTW_LED */
- 
+
 
 /*
  * Description:
