@@ -20,19 +20,39 @@ Currently tested with Linux kernel 4.12.14/4.15.0/5.3.0 on X86_64 platform **onl
 * https://github.com/fastoe/RTL8812BU_for_Raspbian
 
 
-### DKMS installation
-
+### For kernel 5.11 or later, please clone the v5.8.7 branch:
 ```bash
+clone the new branch:
+sudo apt update
+sudo apt install -y dkms git bc
+git clone -b v5.8.7 https://github.com/fastoe/RTL8812BU.git
+cd RTL8812BU
+make
+sudo make install
+sudo reboot
+```
+
+### For 5.10 kernel, please clone the v5.6.1 branch:
+```bash
+clone the new branch:
+sudo apt update
+sudo apt install -y dkms git bc
+git clone -b v5.6.1 https://github.com/fastoe/RTL8812BU.git
+cd RTL8812BU
+make
+sudo make install
+sudo reboot
+```
+
+### For 5.9 and previous versions:
+```bash
+clone the new branch:
 sudo apt update
 sudo apt install -y dkms git bc
 git clone https://github.com/fastoe/RTL8812BU.git
 cd RTL8812BU
-VER=$(sed -n 's/\PACKAGE_VERSION="\(.*\)"/\1/p' dkms.conf)
-sudo rsync -rvhP ./ /usr/src/rtl88x2bu-${VER}
-sudo dkms add -m rtl88x2bu -v ${VER}
-sudo dkms build -m rtl88x2bu -v ${VER}
-sudo dkms install -m rtl88x2bu -v ${VER}
-sudo modprobe 88x2bu
+make
+sudo make install
 sudo reboot
 ```
 
@@ -52,15 +72,4 @@ sudo ip link set wlx1cbfcea97791 up
 
 ![image](https://www.fastoe.com/images/2020/05/8812bu-monitor-mode.png)
 
-### For 5.10 kernel, please clone the v5.6.1 branch:
-```bash
-clone the new branch:
-sudo apt update
-sudo apt install -y dkms git bc
-git clone -b v5.6.1 https://github.com/fastoe/RTL8812BU.git
-cd RTL8812BU
-make
-sudo make install
-sudo reboot
-```
 Enjoy!
