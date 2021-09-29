@@ -13,6 +13,7 @@ A few known wireless cards that use this driver include:
 * Linksys WUSB6400M
 * Dlink DWA-181
 * Dlink DWA-182
+* [DEXP WFA-1301](https://www.dns-shop.ru/product/cd99c844d5383332/wi-fi-adapter-dexp-wfa-1301/)
 
 Currently tested with Linux kernel 4.12.14/4.15.0/5.3.0 on X86_64 platform **only**.
 
