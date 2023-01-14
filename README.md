@@ -14,7 +14,7 @@ A few known wireless cards that use this driver include:
 * Dlink DWA-181
 * Dlink DWA-182
 
-Currently tested with Linux kernel 4.12.14/4.15.0/5.3.0 on X86_64 platform **only**.
+Currently tested with Linux kernel 4.12.14/4.15.0/5.3.0/5.15.0 on X86_64 platform **only**.
 
 ### For Raspberry Pi
 * https://github.com/fastoe/RTL8812BU_for_Raspbian
