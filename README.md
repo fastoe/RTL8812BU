@@ -23,7 +23,7 @@ Currently tested with Linux kernel 4.12.14/4.15.0/5.3.0/5.15.0 on X86_64 platfor
 ### For kernel 5.11 or later, please clone the v5.8.7 branch:
 ```bash
 sudo apt update
-sudo apt install -y dkms git bc
+sudo apt install -y build-essential dkms git bc
 git clone -b v5.8.7 https://github.com/fastoe/RTL8812BU.git
 cd RTL8812BU
 make
@@ -34,7 +34,7 @@ sudo reboot
 ### For 5.10 kernel, please clone the v5.6.1 branch:
 ```bash
 sudo apt update
-sudo apt install -y dkms git bc
+sudo apt install -y build-essential dkms git bc
 git clone -b v5.6.1 https://github.com/fastoe/RTL8812BU.git
 cd RTL8812BU
 make
@@ -45,7 +45,7 @@ sudo reboot
 ### For 5.9 and previous versions:
 ```bash
 sudo apt update
-sudo apt install -y dkms git bc
+sudo apt install -y build-essential dkms git bc
 git clone https://github.com/fastoe/RTL8812BU.git
 cd RTL8812BU
 make
