@@ -23,4 +23,6 @@ jobs:
 
     - name: Configure
       run: |
-        git branch
+        echo ${{ github.ref }}
+        echo ${{ github.head_ref }}
+        echo ${{ github.base_ref }}
