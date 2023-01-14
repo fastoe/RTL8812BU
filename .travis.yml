@@ -1,8 +1,21 @@
 language: c
-dist: focal
-env:
-  global:
-    - KSRC=/lib/modules/5.4.0-52-generic/build
+
+jobs:
+  include:
+    -
+      os: linux
+      dist: jammy
+    -
+      os: linux
+      dist: focal
+    -
+      os: linux
+      dist: bionic
+
 before_install:
-  - sudo apt -y install linux-headers-5.4.0-52-generic git bc
+  - sudo apt -y update
+  - sudo apt -y upgrade
+  - sudo apt dist-upgrade
+  - apt-cache search linux-headers-.*-generic
+  - sudo apt -y install linux-headers-$(uname -r) dkms git bc
 script: make
