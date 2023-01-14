@@ -19,15 +19,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-          ref: master
+          ref: v5.8.7
 
-    - name: configure
+    - name: Configure
       run: |
-        sudo apt -y update
-        sudo apt -y upgrade
-        sudo apt dist-upgrade
-        sudo apt -y install linux-headers-$(uname -r) dkms git bc
-
-    - name: Compile
-      run: |
-        make
+        echo $github.head_ref
