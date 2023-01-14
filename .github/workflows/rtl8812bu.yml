@@ -17,13 +17,10 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
       with:
           ref: v5.8.7
 
     - name: Configure
       run: |
-        echo ${{ github.ref }}
-        echo ${{ github.head_ref }}
-        echo ${{ github.base_ref }}
         echo ${{ github.head_ref || github.ref_name }}
