@@ -751,6 +751,7 @@ enum halmac_ret_status
 init_protocol_cfg_8822b(struct halmac_adapter *adapter)
 {
 	u32 value32;
+	u8 value8;
 	struct halmac_api *api = (struct halmac_api *)adapter->halmac_api;
 
 	PLTFM_MSG_TRACE("[TRACE]%s ===>\n", __func__);
@@ -772,6 +773,9 @@ init_protocol_cfg_8822b(struct halmac_adapter *adapter)
 	HALMAC_REG_W8(REG_FAST_EDCA_VOVI_SETTING + 2, WLAN_FAST_EDCA_VI_TH);
 	HALMAC_REG_W8(REG_FAST_EDCA_BEBK_SETTING, WLAN_FAST_EDCA_BE_TH);
 	HALMAC_REG_W8(REG_FAST_EDCA_BEBK_SETTING + 2, WLAN_FAST_EDCA_BK_TH);
+
+	value8 = HALMAC_REG_R8(REG_INIRTS_RATE_SEL);
+	HALMAC_REG_W8(REG_INIRTS_RATE_SEL, value8 | BIT(5));
 
 	PLTFM_MSG_TRACE("[TRACE]%s <===\n", __func__);
 
@@ -984,9 +988,10 @@ pre_init_system_cfg_8822b(struct halmac_adapter *adapter)
 	enable_bb = 0;
 	set_hw_value_88xx(adapter, HALMAC_HW_EN_BB_RF, &enable_bb);
 
+/* nrm */
 	if (HALMAC_REG_R8(REG_SYS_CFG1 + 2) & BIT(4)) {
 		PLTFM_MSG_ERR("[ERR]test mode!!\n");
-		return HALMAC_RET_WLAN_MODE_FAIL;
+//		return HALMAC_RET_WLAN_MODE_FAIL;
 	}
 
 	PLTFM_MSG_TRACE("[TRACE]%s <===\n", __func__);
