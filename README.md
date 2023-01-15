@@ -1,6 +1,6 @@
 # Realtek RTL8812BU Driver for Linux
 
-[![Build Status](https://travis-ci.com/fastoe/RTL8812BU.svg?branch=master)](https://travis-ci.com/fastoe/RTL8812BU)
+[![Build Status](https://github.com/fastoe/RTL8812BU/actions/workflows/rtl8812bu.yml/badge.svg)](https://github.com/fastoe/RTL8812BU/actions)
 
 Driver for 802.11ac USB adapter with RTL8812BU chipset, only STA/Monitor mode is supported, no AP mode.
 
