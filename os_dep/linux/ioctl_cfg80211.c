@@ -8445,7 +8445,7 @@ static int cfg80211_rtw_tdls_mgmt(struct wiphy *wiphy,
 	u8 *peer,
 #endif
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 5, 0))
-	int nop,
+	int link_id,
 #endif
 	u8 action_code,
 	u8 dialog_token,
