@@ -28,6 +28,9 @@ After updating your kernel, when asked if you would like to restart now, click "
 
 Then, navigate to this project's directory (or `git clone` the appropriate branch)
 
+Ensure that the permissions of `update.sh` are adequate by running this command:
+`chmod -x update.sh`
+
 Finally, run this command:
 `sudo bash ./update.sh`
 
