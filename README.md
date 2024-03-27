@@ -19,6 +19,23 @@ Currently tested with Linux kernel 4.12.14/4.15.0/5.3.0/5.15.0 on X86_64 platfor
 ### For Raspberry Pi
 * https://github.com/fastoe/RTL8812BU_for_Raspbian
 
+### Updating the drivers
+**NOTE: this has only been tested as working with kernel 5.11 and above so far**
+
+You will need to re-install Wifi drivers after each *kernel update*.
+
+After updating your kernel, when asked if you would like to restart now, click "No".
+
+Then, navigate to this project's directory (or `git clone` the appropriate branch)
+
+Ensure that the permissions of `update.sh` are adequate by running this command:
+`chmod -x update.sh`
+
+Finally, run this command:
+`sudo bash ./update.sh`
+
+If you have already rebooted, you will need to run the previous command TWICE so that way you can get the most up-to-date drivers as some commands require internet access.
+
 
 ### For kernel 5.11 or later, please clone the v5.13.1 branch:
 ```bash
