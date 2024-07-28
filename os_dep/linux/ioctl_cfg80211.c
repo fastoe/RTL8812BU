@@ -464,7 +464,15 @@ u8 rtw_cfg80211_ch_switch_notify(_adapter *adapter, u8 ch, u8 bw, u8 offset,
 		 *  called by others with block-tx.
 		 */
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 3, 0) && \
+     LINUX_VERSION_CODE <  KERNEL_VERSION(6, 9, 0))
+    /*  puncturing bitmap was introduced in v6.3:
+	   *  https://github.com/torvalds/linux/commit/d7c1a9a0ed180d8884798ce97afe7283622a484f
+	   *  and moved to the chandef in 6.9:
+	   *  https://github.com/torvalds/linux/commit/b82730bf57b54803ab94abbfd8c4422a7081886d
+	   */
+		cfg80211_ch_switch_started_notify(adapter->pnetdev, &chdef, 0, 0, false, 0);
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
 		cfg80211_ch_switch_started_notify(adapter->pnetdev, &chdef, 0, 0, false);
 #else
 		cfg80211_ch_switch_started_notify(adapter->pnetdev, &chdef, 0, false);
@@ -479,7 +487,11 @@ u8 rtw_cfg80211_ch_switch_notify(_adapter *adapter, u8 ch, u8 bw, u8 offset,
 	if (!rtw_cfg80211_allow_ch_switch_notify(adapter))
 		goto exit;
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 2))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 3, 0) && \
+     LINUX_VERSION_CODE <  KERNEL_VERSION(6, 9, 0))
+	// puncturing bitmap arg again
+	cfg80211_ch_switch_notify(adapter->pnetdev, &chdef, 0, 0);
+#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 19, 2))
 	cfg80211_ch_switch_notify(adapter->pnetdev, &chdef, 0);
 #else
 	cfg80211_ch_switch_notify(adapter->pnetdev, &chdef);
@@ -5398,14 +5410,28 @@ exit:
 }
 
 static int cfg80211_rtw_change_beacon(struct wiphy *wiphy, struct net_device *ndev,
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 7, 0))
+	/*	Kernel 6.7.0 refactored the beacon into a wrapper struct that carries some
+	 *	other metadata.
+	 *
+	 *	https://github.com/torvalds/linux/commit/bb55441c57ccc5cc2eab44e1a97698b9d708871d
+	 */
+	  struct cfg80211_ap_update *update)
+#else
 		struct cfg80211_beacon_data *info)
+#endif
 {
 	int ret = 0;
 	_adapter *adapter = (_adapter *)rtw_netdev_priv(ndev);
 
 	RTW_INFO(FUNC_NDEV_FMT"\n", FUNC_NDEV_ARG(ndev));
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 7, 0))
+	ret = rtw_add_beacon(adapter, update->beacon.head, update->beacon.head_len,
+			update->beacon.tail, update->beacon.tail_len);
+#else
 	ret = rtw_add_beacon(adapter, info->head, info->head_len, info->tail, info->tail_len);
+#endif
 
 	return ret;
 }
@@ -8439,6 +8465,9 @@ static int cfg80211_rtw_tdls_mgmt(struct wiphy *wiphy,
 	const u8 *peer,
 #else
 	u8 *peer,
+#endif
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 5, 0))
+	int link_id,
 #endif
 	u8 action_code,
 	u8 dialog_token,

@@ -1,0 +1,7 @@
+.88x2bu.mod.cmd
+os_dep/**/*.o
+os_dep/**/*.o.cmd
+os_dep/**/*.o.d
+core/**/*.o
+core/**/*.o.cmd
+88x2bu.mod
